@@ -1,0 +1,799 @@
+{
+  "name": "LEAD QUALIFIER",
+  "nodes": [
+    {
+      "parameters": {
+        "formTitle": "Lead Qualification Form",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Name"
+            },
+            {
+              "fieldLabel": "Email"
+            },
+            {
+              "fieldLabel": "Phone"
+            },
+            {
+              "fieldLabel": "Company"
+            },
+            {
+              "fieldLabel": "What is your position in the company?"
+            },
+            {
+              "fieldLabel": "What services are you interested in?"
+            },
+            {
+              "fieldLabel": "What problem are you trying to solve?"
+            },
+            {
+              "fieldLabel": "What is your budget?",
+              "fieldType": "dropdown",
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "Below $500"
+                  },
+                  {
+                    "option": "$500 -$1000"
+                  },
+                  {
+                    "option": "$1000 -$5000"
+                  },
+                  {
+                    "option": "$5000+"
+                  }
+                ]
+              }
+            },
+            {
+              "fieldLabel": "Are you a decision maker?",
+              "fieldType": "dropdown",
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "Yes"
+                  },
+                  {
+                    "option": "No"
+                  },
+                  {
+                    "option": "I influence decision"
+                  },
+                  {
+                    "option": "Not sure"
+                  }
+                ]
+              }
+            },
+            {
+              "fieldLabel": "When will you like to get started",
+              "fieldType": "dropdown",
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "Immediately"
+                  },
+                  {
+                    "option": "Within 1 month"
+                  },
+                  {
+                    "option": "Later"
+                  },
+                  {
+                    "option": "Just researching"
+                  }
+                ]
+              }
+            },
+            {
+              "fieldLabel": "Additional message"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.6,
+      "position": [
+        -32,
+        0
+      ],
+      "id": "c93e16c1-f066-4b04-82b2-358a5eea21ff",
+      "name": "On form submission",
+      "webhookId": "b5e5c7ab-e5ec-4dc8-8689-588827bc27c9"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "687ce667-6b79-4a15-a8b2-4d2829a31811",
+              "name": "Full Name",
+              "value": "={{ $json.Name }}",
+              "type": "string"
+            },
+            {
+              "id": "d4f2f0fd-59e9-4a18-bd3a-316943afcc4b",
+              "name": "Email Address",
+              "value": "={{ $json.Email }}",
+              "type": "string"
+            },
+            {
+              "id": "3f53d8ed-f5c3-4050-8b4a-5422d7a6b658",
+              "name": "Phone No",
+              "value": "={{ $json.Phone }}",
+              "type": "string"
+            },
+            {
+              "id": "b0540694-87c7-49d2-8b08-003102bcc03a",
+              "name": "Company Name",
+              "value": "={{ $json.Company }}",
+              "type": "string"
+            },
+            {
+              "id": "14db86f8-71f4-45c1-8367-08af24154761",
+              "name": "Position",
+              "value": "={{ $json['What is your position in the company?'] }}",
+              "type": "string"
+            },
+            {
+              "id": "eb8403fc-499d-448d-8e34-b70037fed688",
+              "name": "Need",
+              "value": "={{ $json['What services are you interested in?'] }}",
+              "type": "string"
+            },
+            {
+              "id": "713be309-cf19-437e-b1e0-12b1ba28b25e",
+              "name": "Budget",
+              "value": "={{ $json['What is your budget?'] }}",
+              "type": "string"
+            },
+            {
+              "id": "7a9be902-aeaf-4ad6-8461-04687adab48f",
+              "name": "Authority",
+              "value": "={{ $json['Are you a decision maker?'] }}",
+              "type": "string"
+            },
+            {
+              "id": "fcd57cee-ed78-400a-bf31-382fe0bc79ee",
+              "name": "Timeline",
+              "value": "={{ $json['When will you like to get started'] }}",
+              "type": "string"
+            },
+            {
+              "id": "ab8fcea3-1047-4f85-a131-09209a94a54f",
+              "name": "Message",
+              "value": "={{ $json['Additional message'] }}",
+              "type": "string"
+            },
+            {
+              "id": "b77cfd4c-2444-4c3b-b875-bd6bc0ab7025",
+              "name": "Source",
+              "value": "={{ $json.formMode }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        192,
+        0
+      ],
+      "id": "308cd07b-9b0b-4806-abb3-e84dc9a9ef03",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "filters": {}
+      },
+      "type": "n8n-nodes-base.gmailTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        -32,
+        192
+      ],
+      "id": "a32da2c6-cf6e-4d41-8696-b51909188e19",
+      "name": "Gmail Trigger",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "mCuNWZBhn8eW9y0c",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "5d6eabcc-c61d-488c-9899-2203278e7ee8",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -32,
+        384
+      ],
+      "id": "d9622a77-3ac6-4535-afdd-22bd7a1428e3",
+      "name": "Webhook",
+      "webhookId": "5d6eabcc-c61d-488c-9899-2203278e7ee8"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "687ce667-6b79-4a15-a8b2-4d2829a31811",
+              "name": "Full Name",
+              "value": "=",
+              "type": "string"
+            },
+            {
+              "id": "d4f2f0fd-59e9-4a18-bd3a-316943afcc4b",
+              "name": "Email Address",
+              "value": "={{ $json.From }}",
+              "type": "string"
+            },
+            {
+              "id": "3f53d8ed-f5c3-4050-8b4a-5422d7a6b658",
+              "name": "Phone No",
+              "value": "=",
+              "type": "string"
+            },
+            {
+              "id": "b0540694-87c7-49d2-8b08-003102bcc03a",
+              "name": "Company Name",
+              "value": "=",
+              "type": "string"
+            },
+            {
+              "id": "14db86f8-71f4-45c1-8367-08af24154761",
+              "name": "Position",
+              "value": "=",
+              "type": "string"
+            },
+            {
+              "id": "eb8403fc-499d-448d-8e34-b70037fed688",
+              "name": "Need",
+              "value": "=",
+              "type": "string"
+            },
+            {
+              "id": "713be309-cf19-437e-b1e0-12b1ba28b25e",
+              "name": "Budget",
+              "value": "",
+              "type": "string"
+            },
+            {
+              "id": "7a9be902-aeaf-4ad6-8461-04687adab48f",
+              "name": "Authority",
+              "value": "=",
+              "type": "string"
+            },
+            {
+              "id": "fcd57cee-ed78-400a-bf31-382fe0bc79ee",
+              "name": "Timeline",
+              "value": "",
+              "type": "string"
+            },
+            {
+              "id": "901bf1cd-3849-4a2b-821f-ada1d978c194",
+              "name": "Message",
+              "value": "={{ $json.snippet }}",
+              "type": "string"
+            },
+            {
+              "id": "9b51bc4d-acb2-4e3c-b8a7-71e3496ad228",
+              "name": "Source",
+              "value": "",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        192,
+        192
+      ],
+      "id": "263bd1ff-22db-49fa-acc1-ba1ba0ecce0b",
+      "name": "Edit Fields1"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "687ce667-6b79-4a15-a8b2-4d2829a31811",
+              "name": "Full Name",
+              "value": "=",
+              "type": "string"
+            },
+            {
+              "id": "d4f2f0fd-59e9-4a18-bd3a-316943afcc4b",
+              "name": "Email Address",
+              "value": "",
+              "type": "string"
+            },
+            {
+              "id": "3f53d8ed-f5c3-4050-8b4a-5422d7a6b658",
+              "name": "Phone No",
+              "value": "",
+              "type": "string"
+            },
+            {
+              "id": "b0540694-87c7-49d2-8b08-003102bcc03a",
+              "name": "Company Name",
+              "value": "=",
+              "type": "string"
+            },
+            {
+              "id": "14db86f8-71f4-45c1-8367-08af24154761",
+              "name": "Position",
+              "value": "=",
+              "type": "string"
+            },
+            {
+              "id": "eb8403fc-499d-448d-8e34-b70037fed688",
+              "name": "Need",
+              "value": "",
+              "type": "string"
+            },
+            {
+              "id": "713be309-cf19-437e-b1e0-12b1ba28b25e",
+              "name": "Budget",
+              "value": "",
+              "type": "string"
+            },
+            {
+              "id": "7a9be902-aeaf-4ad6-8461-04687adab48f",
+              "name": "Authority",
+              "value": "=",
+              "type": "string"
+            },
+            {
+              "id": "fcd57cee-ed78-400a-bf31-382fe0bc79ee",
+              "name": "Timeline",
+              "value": "",
+              "type": "string"
+            },
+            {
+              "id": "65443e31-a292-465f-b8e9-f90e6f5cb712",
+              "name": "Message",
+              "value": "",
+              "type": "string"
+            },
+            {
+              "id": "d894b00b-cb05-443d-8839-072bf1fbcf2f",
+              "name": "Source",
+              "value": "",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        192,
+        384
+      ],
+      "id": "9be93d8f-053f-4c29-ae7a-b3f237045044",
+      "name": "Edit Fields2"
+    },
+    {
+      "parameters": {
+        "numberInputs": 3
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        416,
+        176
+      ],
+      "id": "c2d13a76-be8f-4f6e-8702-6ac61aa07217",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Analyze this information using the BANT framework\n\n{\n  \"Full Name\": \"{{$json['Full Name']}}\",\n  \"Email Address\": \"{{$json['Email Address']}}\",\n  \"Phone No\": \"{{$json['Phone No']}}\",\n  \"Company Name\": \"{{$json['Company Name']}}\",\n  \"Position\": \"{{$json['Position']}}\",\n  \"Need\": \"{{$json['Need']}}\",\n  \"Budget\": \"{{$json['Budget']}}\",\n  \"Authority\": \"{{$json['Authority']}}\",\n  \"Timeline\": \"{{$json['Timeline']}}\",\n  \"Message\": \"{{$json['Message']}}\",\n  \"Source\": \"{{$json['Source']}}\"\n}\n\n\n",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "You are a B2B lead qualification assistant.\n\nYour job is to analyze incoming leads using the BANT framework.\n\nB — Budget:\nDetermine whether the lead has mentioned a budget, pricing expectation,\nor demonstrated willingness or ability to invest.\n\nA — Authority:\nDetermine whether the lead is the decision-maker or has influence over\nthe purchasing decision.\n\nN — Need:\nDetermine whether the lead has a clear business problem or need that\nthe company's service can solve.\n\nT — Timeline:\nDetermine how soon the lead wants to take action.\n\nDo not invent information.\n\nIf a BANT factor is not provided or cannot reasonably be determined,\nmark it as Unknown.\n\nAfter evaluating the BANT information, classify the lead as exactly one\nof these:\n\nHOT\nWARM\nCOLD\n\nHOT:\nThe lead demonstrates strong buying potential, with a clear need and\nstrong evidence across several BANT factors, particularly authority\nand/or an active timeline.\n\nWARM:\nThe lead shows genuine potential but some important BANT information\nis missing, unclear, or indicates that they are still researching.\n\nCOLD:\nThe lead shows weak buying potential, little or no clear need, or no\nmeaningful indication of a current purchasing opportunity.\n\nDo not invent information.\n\n \nReturn only the fields in the required format: budget, budget_range, authority, need, timeline, classification, summary."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        640,
+        192
+      ],
+      "id": "6fa294bc-79fd-40ab-93b5-96a7e6c8d776",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-4.1-mini",
+          "mode": "list",
+          "cachedResultName": "gpt-4.1-mini"
+        },
+        "builtInTools": {},
+        "options": {
+          "textFormat": {
+            "textOptions": {
+              "type": "json_schema"
+            }
+          }
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        648,
+        424
+      ],
+      "id": "79110723-9caa-4066-8a6b-3544534d4f5c",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "qj8VpsqIYFvabdW8",
+          "name": "OpenAI account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "loose",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.output }}",
+                    "rightValue": "HOT",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    },
+                    "id": "700e19c6-be16-44cb-9e82-80cba10448b5"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Hot"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "loose",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "c5ff6d95-f145-4068-93ed-01d0b7419562",
+                    "leftValue": "={{ $json.output }}",
+                    "rightValue": "WARM",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Warm"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "loose",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "16eb432d-251c-4fa2-9899-c5ccf3d8b3ed",
+                    "leftValue": "={{ $json.output }}",
+                    "rightValue": "COLD",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Cold"
+            }
+          ]
+        },
+        "looseTypeValidation": true,
+        "options": {
+          "ignoreCase": false
+        }
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        992,
+        176
+      ],
+      "id": "7c540a65-98e6-4cd6-b159-629715a3d6ba",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n  \"budget\": \"Provided\",\n  \"budget_range\": \"$1000 - $5000\",\n  \"authority\": \"Yes, CEO\",\n  \"need\": \"Solar Installation\",\n  \"timeline\": \"Within 1 month\",\n  \"classification\": \"HOT\",\n  \"summary\": \"Clear budget, decision-maker, defined need, and acts within one month.\"\n}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        816,
+        416
+      ],
+      "id": "e58c8c39-762f-4911-91d7-e41f1e7fee25",
+      "name": "Structured Output Parser"
+    }
+  ],
+  "pinData": {
+    "On form submission": [
+      {
+        "json": {
+          "Name": "KELECHI SAMSON",
+          "Email": "swiftslakelogistics@gmail.com",
+          "Phone": "08083085320",
+          "Company": "Bigi foods",
+          "What is your position in the company?": "CEO",
+          "What services are you interested in?": "Solar Installation",
+          "What problem are you trying to solve?": "Food Spoilage",
+          "What is your budget?": "$1000 -$5000",
+          "Are you a decision maker?": "Yes",
+          "When will you like to get started": "Within 1 month",
+          "Additional message": "How do i get started",
+          "submittedAt": "2026-10-01T01:38:22.779+01:00",
+          "formMode": "test"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ],
+    "Webhook": [
+      {
+        "json": {
+          "headers": {
+            "host": "techbae.app.n8n.cloud",
+            "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/154.0.0.0 Safari/537.36 Edg/154.0.0.0",
+            "content-length": "325",
+            "accept": "*/*",
+            "accept-encoding": "gzip, br",
+            "cdn-loop": "cloudflare; loops=1; subreqs=1",
+            "cf-connecting-ip": "64.227.21.251",
+            "cf-ew-via": "15",
+            "cf-ipcountry": "US",
+            "cf-ray": "a437a4136849dcde-EWR",
+            "cf-visitor": "{\"scheme\":\"https\"}",
+            "cf-worker": "n8n.cloud",
+            "content-type": "application/json",
+            "x-forwarded-for": "64.227.21.251, 162.158.63.171",
+            "x-forwarded-host": "techbae.app.n8n.cloud",
+            "x-forwarded-port": "443",
+            "x-forwarded-proto": "https",
+            "x-forwarded-server": "traefik-prod-users-swc-12-59b6985f69-5vwkj",
+            "x-is-trusted": "yes",
+            "x-real-ip": "64.227.21.251"
+          },
+          "params": {},
+          "query": {},
+          "body": [
+            {
+              "Full Name": "CHIOMA NWANKWO",
+              "Email Address": "chiomanwanko@example.com",
+              "Phone No": "07039876543",
+              "Company Name": "Prime Logistics",
+              "Position": "Operations Director",
+              "Need": "Delivery Tracking",
+              "Budget": "$1000 -$5000",
+              "Authority": "Yes",
+              "Timeline": "Within 3 months"
+            }
+          ],
+          "webhookUrl": "https://techbae.app.n8n.cloud/webhook-test/5d6eabcc-c61d-488c-9899-2203278e7ee8",
+          "executionMode": "test"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ],
+    "Gmail Trigger": [
+      {
+        "json": {
+          "id": "1a0f54bc7a07dde4",
+          "threadId": "1a0f54bc7a07dde4",
+          "snippet": "Hi, I run a restaurant and recently with the hick in fuel price and power inavailability we have got some of our foods spoilt and we want to be able to prevent these loses. Reason why we need a solar",
+          "payload": {
+            "mimeType": "multipart/alternative"
+          },
+          "sizeEstimate": 7736,
+          "historyId": "1127894",
+          "internalDate": "1790821766000",
+          "labels": [
+            {
+              "id": "INBOX",
+              "name": "INBOX"
+            },
+            {
+              "id": "CATEGORY_PERSONAL",
+              "name": "CATEGORY_PERSONAL"
+            },
+            {
+              "id": "UNREAD",
+              "name": "UNREAD"
+            }
+          ],
+          "From": "Debeke Hope <debekehope@gmail.com>",
+          "Subject": "Need Solar Installation",
+          "To": "hopedebeke@gmail.com"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ]
+  },
+  "connections": {
+    "On form submission": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gmail Trigger": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields2": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 2
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields1": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "63aa4424-05c9-4b3f-a468-fc89fb99dd8c",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "7902174cb8fa2c94aa68705a3d77a8d1dd6bfa964deb06ead6d67dd0495ca7b8"
+  },
+  "nodeGroups": [],
+  "id": "N6lbyfgNQwlyJgvP",
+  "tags": []
+}
